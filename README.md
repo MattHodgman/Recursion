@@ -21,16 +21,16 @@ This can be done by running the following commands:
 These scripts run using the SLURM Workload Manager. To perform these analyses without SLURM, you must replace `sbatch` with `bash` in all the bash scripts. When running with SLURM, you may need to adjust the bash scripts resource requests or other arguments. 
 
 ### Determine the Noise vs. Biological Signal in each Feature
-Run this command to split the data by experiment and calculate shap values for each feature when predicting plate (batch effect/noise) vs disease condition (biological signal):  
+Run this command to split the data by experiment and calculate SHAP values for each feature when predicting plate (batch effect/noise) vs disease condition (biological signal):  
 `bash split_n_get_shaps.sh embeddings.csv metadata.csv`
 
-Run this command to view plots of the two shap values for each feature plotted against each other:  
+Run this command to view plots of the two SHAP values for each feature plotted against each other:  
 `bash run_shap_plots.sh`
 
-Look at each experiments' plot to determine a cutoff for the disease condition shap that will remove the features that have small shap values for disease condition but have large shap values for plate. Record these cut off values because we will use them in subsequent scripts.
+Look at each experiments' plot to determine a cutoff for the disease condition shap that will remove the features that have small SHAP values for disease condition but have large shap values for plate. Record these four cut off values because we will use them in subsequent scripts.
 
-### Ensure that Removing Noisy Features does not Hurt Performance
-Run this command to perform a sensitivity test on each experiment:  
+### Ensure that Removing Noisy Features does not Remove Biological Signal
+Run this command to perform a sensitivity test on each experiment except replace the four numbers with your determined SHAP cut off values for the HRCE-1, HRCE-2, VERO-1, and VERO-2 experiments, respectively.  
 `bash run_all_sensitvity_tests.sh 0.0002 0.0022 0.002 0.00015`
 
 ### Identify Potentially Effective Treatments
