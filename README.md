@@ -42,7 +42,7 @@ Run this command to identify treatments that might be effective against SARS-CoV
 ## Cosine Similarity vs RandomForest Predicted Probability
 
 ### HRCE-1 (Mock)
-SHAP Value Cutoff: 0.002
+SHAP Value Cutoff: 0.0002
 
 |Rank|Drug (Concentration)     |Cosine Similarity|Drug (Concentration)     |RandomForest Predicted Probability|
 |----|-------------------------|-----------------|-------------------------|----------------------------------|
