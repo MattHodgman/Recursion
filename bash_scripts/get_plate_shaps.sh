@@ -9,5 +9,5 @@ data=$1 # the combined embeddings and metadata file for an experiment
 experiment=$2 # the name of the experiment
 
 # compute shap values for predicting plate.
-source env/bin/activate
-python3 1a_plate_shap.py -i "$data" -o "$experiment" -n shap_values_plate.csv
+source ../env/bin/activate
+python3 ../python_scripts/plate_shap.py -i "$data" -o ../data/"$experiment" -n shap_values_plate.csv

@@ -7,7 +7,7 @@
 [Link to workflow](https://lucid.app/lucidchart/9739d8d3-26d3-4959-b034-2f15c89a7847/edit?invitationId=inv_9ac14d2d-d648-4636-b2d6-6305685309c3)
 
 ### Download the RxRx19a Data
-Go to [https://www.rxrx.ai/rxrx19a](https://www.rxrx.ai/rxrx19a), scroll to the bottom of the page, and download the "Metadata" and "Deep Learning Embeddings." Put these files (`metadata.csv` and `embeddings.csv`) into the same directory as the pipeline scripts.
+Go to [https://www.rxrx.ai/rxrx19a](https://www.rxrx.ai/rxrx19a), scroll to the bottom of the page, and download the "Metadata" and "Deep Learning Embeddings." Put these files (`metadata.csv` and `embeddings.csv`) into the `data` directory.
 
 ### Set up the Environment
 Create a Python3 virtual environment and install the packages from the provided `requirements.txt` file.
@@ -22,20 +22,20 @@ These scripts run using the SLURM Workload Manager. To perform these analyses wi
 
 ### Determine the Noise vs. Biological Signal in each Feature
 Run this command to split the data by experiment and calculate SHAP values for each feature when predicting plate (batch effect/noise) vs disease condition (biological signal):  
-`bash split_n_get_shaps.sh embeddings.csv metadata.csv`
+`bash bash_scripts/split_n_get_shaps.sh data/embeddings.csv data/metadata.csv`
 
 Run this command to view plots of the two SHAP values for each feature plotted against each other:  
-`bash run_shap_plots.sh`
+`bash bash_scripts/run_shap_plots.sh`
 
 Look at each experiments' plot to determine a cutoff for the disease condition shap that will remove the features that have small SHAP values for disease condition but have large shap values for plate. Record these four cut off values because we will use them in subsequent scripts.
 
 ### Ensure that Removing Noisy Features does not Remove Biological Signal
 Run this command to perform a sensitivity test on each experiment except replace the four numbers with your determined SHAP cut off values for the HRCE-1, HRCE-2, VERO-1, and VERO-2 experiments, respectively.  
-`bash run_all_sensitvity_tests.sh 0.0002 0.0022 0.002 0.00015`
+`bash bash_scripts/run_all_sensitvity_tests.sh 0.0002 0.0022 0.002 0.00015`
 
 ### Identify Potentially Effective Treatments
 Run this command to identify treatments that might be effective against SARS-CoV-2, using two different methods:  
-`bash identify_effective_treatments.sh 0.0002 0.0022 0.002 0.00015`
+`bash bash_scripts/identify_effective_treatments.sh 0.0002 0.0022 0.002 0.00015`
 
 # Results
 
