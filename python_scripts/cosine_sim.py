@@ -58,7 +58,7 @@ if __name__ == '__main__':
     controls_only = joined_df_dot[joined_df_dot[constants.DISEASE_CONDITION] != 'Active SARS-CoV-2']
     controls_only[constants.EXPERIMENT_TRT_CONC_DC] = controls_only[constants.EXPERIMENT_TRT_CONC] + ' ' + controls_only[constants.DISEASE_CONDITION]
     controls_only_groupby_mean = controls_only.groupby(constants.EXPERIMENT_TRT_CONC_DC).mean()
-    # Get cosing similarity
+    # Get cosine similarity
     cosine_similarity_matrix = cosine_similarity(active_sars_cov_only_groupby_mean , controls_only_groupby_mean)
     cosine_sim_df = pd.DataFrame(data=cosine_similarity_matrix,index = active_sars_cov_only_groupby_mean.index.to_list(),columns = controls_only_groupby_mean.index.to_list())
     # Write to csv

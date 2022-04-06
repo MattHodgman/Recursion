@@ -1,3 +1,4 @@
+# This script uses the experiment-specific deep learning embeddings and disease condition SHAP cutoffs to rank compounds on their predicted effectiveness against SARS-CoV-2
 # Arguments: the disease condition shap value cutoff for each experiment.
 
 # Compute cosine similarity of treatment embeddings to controls.

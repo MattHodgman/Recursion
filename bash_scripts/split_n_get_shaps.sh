@@ -1,3 +1,5 @@
+# This script initializes the pipeline by setting up the experiment directories, splitting the deep learning embeddings and metadata by experiment, then it submits SLURM jobs to calculate the SHAP values for each deep learning embedding feature for predicting plate and disease condition.
+
 embeddings=$1
 metadata=$2
 

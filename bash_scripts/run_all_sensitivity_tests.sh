@@ -1,3 +1,4 @@
+# This script runs a sensitviity test for each experiment separately to determine how much feature dropping affects predicting disease condition.
 # Arguments: for each experiment, the shap value (from predicting disease condition) to use as a cutoff to remove features that help predict plate but not disease condition
 
 # run sensitivity test and plot results

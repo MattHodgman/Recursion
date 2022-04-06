@@ -5,6 +5,8 @@
 #SBATCH --mem-per-cpu=30G
 #SBATCH -J "plate shaps" # job name
 
+# This script calculates the SHAPs of all deep learning embedding features when predicting the plate.
+
 data=$1 # the combined embeddings and metadata file for an experiment
 experiment=$2 # the name of the experiment
 
