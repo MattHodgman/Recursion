@@ -1,3 +1,5 @@
+# This script splits the deep learning embeddings and metadata by experiment and writes the files to each experiments directory.
+
 import pandas as pd
 import argparse
 import constants

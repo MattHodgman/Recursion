@@ -1,3 +1,5 @@
+# This file holds the constants used in python scripts throughout the pipeline.
+
 SITE_ID = 'site_id'
 EXPERIMENT = 'experiment'
 SHAP_VALUE = 'shap_value'

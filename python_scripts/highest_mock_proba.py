@@ -1,3 +1,5 @@
+# This script calculates the predicted probability that tests of compounds are missclassified as positive controls ("healthy" cells).
+
 import pandas as pd
 import numpy as np
 import argparse

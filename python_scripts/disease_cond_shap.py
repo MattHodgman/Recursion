@@ -1,3 +1,5 @@
+# This script calculates the SHAP value for each deep learning embedding feature for predicting disease condition.
+
 import pandas as pd
 import numpy as np
 import argparse

@@ -1,3 +1,5 @@
+# This script performs a sensitivity test to assess how dropping deep learning embedding features affects the performance of predicting the disease condition.
+
 import pandas as pd
 import numpy as np
 import argparse

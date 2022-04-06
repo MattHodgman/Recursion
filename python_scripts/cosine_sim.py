@@ -1,3 +1,5 @@
+# This script calculates the cosine similarity between the deep learning embeddings of cells treated with SARS-CoV-2 and positive controls ("healthy" cells).
+
 import pandas as pd
 import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity

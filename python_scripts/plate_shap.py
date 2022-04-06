@@ -1,3 +1,5 @@
+# This script calculates the SHAP value for each deep learning embedding feature for predicting plate.
+
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import cross_validate
 from sklearn.model_selection import train_test_split

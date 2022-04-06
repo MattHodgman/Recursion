@@ -1,3 +1,5 @@
+# This script plots the SHAP values for predicting plate and disease condition for each feature on a scatter plot.
+
 import pandas as pd
 import matplotlib.pyplot as plt
 import argparse
