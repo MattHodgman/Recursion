@@ -1,10 +1,6 @@
 import pandas as pd
 import argparse
-
-
-# Constants.
-_SITE_ID = 'site_id'
-_EXPERIMENT = 'experiment'
+import constants
 
 
 def parse_args():
@@ -36,7 +32,7 @@ if __name__ == '__main__':
     metadata = pd.read_csv(args.metadata)
 
     # Merge data.
-    df = embeddings.merge(metadata, on=_SITE_ID)
+    df = embeddings.merge(metadata, on=constants.SITE_ID)
 
     del embeddings
     del metadata
@@ -46,5 +42,5 @@ if __name__ == '__main__':
 
     for exp in experiments:
         print(f'subsetting {exp} and writing to file {out_dir}/{exp}/{out_file_name}')
-        exp_df = df[df[_EXPERIMENT] == exp]
+        exp_df = df[df[constants.EXPERIMENT] == exp]
         exp_df.to_csv(f'{out_dir}/{exp}/{out_file_name}', index=False)

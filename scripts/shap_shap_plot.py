@@ -1,10 +1,8 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 import argparse
+import constants
 
-# Constants
-_FEATURE = 'feature'
-_SHAP_VALUE = 'shap_value'
 
 def parse_args():
     """
@@ -35,16 +33,16 @@ if __name__ == '__main__':
     disease_condition_shaps = pd.read_csv(args.diseaseConditionShaps)
 
     # Remove 'feature_' from feature names, only retain integer ID.
-    plate_shaps[_FEATURE] = plate_shaps[_FEATURE].str.replace(r'\D', '').astype(int)
-    disease_condition_shaps[_FEATURE] = disease_condition_shaps[_FEATURE].str.replace(r'\D', '').astype(int)
+    plate_shaps[constants.FEATURE] = plate_shaps[constants.FEATURE].str.replace(r'\D', '').astype(int)
+    disease_condition_shaps[constants.FEATURE] = disease_condition_shaps[constants.FEATURE].str.replace(r'\D', '').astype(int)
 
     # Sort features by their ID.
-    plate_shaps.sort_values(by=_FEATURE, ascending=True, inplace=True)
-    disease_condition_shaps.sort_values(by=_FEATURE, ascending=True,inplace=True)
+    plate_shaps.sort_values(by=constants.FEATURE, ascending=True, inplace=True)
+    disease_condition_shaps.sort_values(by=constants.FEATURE, ascending=True,inplace=True)
 
     # Plot features according to their Shapley values.
     plt.figure(figsize=(10,6))
-    plt.scatter(x=plate_shaps[_SHAP_VALUE], y=disease_condition_shaps[_SHAP_VALUE])
+    plt.scatter(x=plate_shaps[constants.SHAP_VALUE], y=disease_condition_shaps[constants.SHAP_VALUE])
     plt.xlabel('Plate Shap')
     plt.ylabel('Disease Condition Shap')
     plt.title(f'{args.experiment} Feature Importance in Predicting Plate vs. Disease Condition')

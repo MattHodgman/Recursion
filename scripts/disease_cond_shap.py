@@ -5,16 +5,7 @@ import matplotlib.pyplot as plt
 from sklearn.metrics import plot_confusion_matrix
 from imblearn.ensemble import BalancedRandomForestClassifier
 import shap
-
-
-# Constants.
-_FEATURE_PREFIX = 'feature_'
-_FEATURE = 'feature'
-_SHAP_VALUE = 'shap_value'
-_SITE_ID = 'site_id'
-_DISEASE_CONDITION = 'disease_condition'
-_NULL = 'null'
-_TREATMENT = 'treatment'
+import constants
 
 
 def parse_args():
@@ -43,17 +34,17 @@ if __name__ == '__main__':
     # Load data and preprocess data.
     df = pd.read_csv(args.input)
 
-    feature_cols = [col for col in df.columns if _FEATURE_PREFIX in col]
-    df[_DISEASE_CONDITION] = df[_DISEASE_CONDITION].fillna(_NULL)
+    feature_cols = [col for col in df.columns if constants.FEATURE_PREFIX in col]
+    df[constants.DISEASE_CONDITION] = df[constants.DISEASE_CONDITION].fillna(constants.NULL)
 
     # Split data to train on the controls and test on the experiments with drugs
-    df_controls = df[df[_TREATMENT].isna()]
+    df_controls = df[df[constants.TREATMENT].isna()]
     X_train = df_controls[feature_cols]
-    y_train = df_controls[_DISEASE_CONDITION]
+    y_train = df_controls[constants.DISEASE_CONDITION]
 
-    df_drugs = df[~df[_TREATMENT].isna()]
+    df_drugs = df[~df[constants.TREATMENT].isna()]
     X_test = df_drugs[feature_cols]
-    y_test = df_drugs[_DISEASE_CONDITION]
+    y_test = df_drugs[constants.DISEASE_CONDITION]
 
     del df
     del df_controls
@@ -74,8 +65,8 @@ if __name__ == '__main__':
 
     # Write feature Shapley values to CSV.
     mean_feature_shap_values = np.abs(shap_values).mean(0).mean(0)
-    df_shap = pd.DataFrame(mean_feature_shap_values, columns=[_SHAP_VALUE])
-    df_shap[_FEATURE] = _FEATURE_PREFIX + df_shap.index.astype(str)
-    df_shap = df_shap[[_FEATURE, _SHAP_VALUE]]
-    df_shap = df_shap.sort_values(by=_SHAP_VALUE, ascending=False)
+    df_shap = pd.DataFrame(mean_feature_shap_values, columns=[constants.SHAP_VALUE])
+    df_shap[constants.FEATURE] = constants.FEATURE_PREFIX + df_shap.index.astype(str)
+    df_shap = df_shap[[constants.FEATURE, constants.SHAP_VALUE]]
+    df_shap = df_shap.sort_values(by=constants.SHAP_VALUE, ascending=False)
     df_shap.to_csv(f'{out_dir}/{out_file_name}', index=False)

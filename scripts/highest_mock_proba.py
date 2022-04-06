@@ -2,11 +2,7 @@ import pandas as pd
 import numpy as np
 import argparse
 from imblearn.ensemble import BalancedRandomForestClassifier
-
-
-# Constants.
-_SHAP_VALUE = 'shap_value'
-_FEATURE_PREFIX = 'feature_'
+import constants
 
 
 def parse_args():
@@ -39,8 +35,8 @@ if __name__ == '__main__':
     shap = pd.read_csv(args.diseaseConditionShaps)
 
     # Preprocess data.
-    shap = shap.sort_values(by=[_SHAP_VALUE], ascending=False)
-    features_to_drop = list(shap[shap[_SHAP_VALUE]<final_shap_cutoff].feature)
+    shap = shap.sort_values(by=[constants.SHAP_VALUE], ascending=False)
+    features_to_drop = list(shap[shap[constants.SHAP_VALUE]<final_shap_cutoff].feature)
     joined_df_dot = df.copy(deep=True).drop(features_to_drop,axis=1)
     df['disease_condition'] = df['disease_condition'].fillna('null')
     joined_df_dot['disease_condition'] = joined_df_dot['disease_condition'].fillna('null')
@@ -50,7 +46,7 @@ if __name__ == '__main__':
     df['treatment_plus_conc'] = df['treatment'] + " " + df['treatment_conc'].astype(str)
 
     # Split into control and treatment.
-    feature_cols = [col for col in joined_df_dot.columns if _FEATURE_PREFIX in col]
+    feature_cols = [col for col in joined_df_dot.columns if constants.FEATURE_PREFIX in col]
     joined_df_dot_controls = joined_df_dot[joined_df_dot['treatment'].isna()]
     X_train = joined_df_dot_controls[feature_cols]
     y_train = joined_df_dot_controls['disease_condition']

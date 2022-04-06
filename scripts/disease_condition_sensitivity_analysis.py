@@ -4,15 +4,7 @@ import argparse
 from imblearn.ensemble import BalancedRandomForestClassifier
 from sklearn.model_selection import cross_validate
 import matplotlib.pyplot as plt
-
-
-# Constants. NOTE: I was too lazy to make a constant for each scoring metric.
-_FEATURE_PREFIX = 'feature_'
-_SHAP_VALUE = 'shap_value'
-_SITE_ID = 'site_id'
-_DISEASE_CONDITION = 'disease_condition'
-_NULL = 'null'
-_TREATMENT = 'treatment'
+import constants
 
 
 def parse_args():
@@ -48,25 +40,25 @@ if __name__ == '__main__':
     shaps =  pd.read_csv(args.diseaseConditionShaps)
 
     # Preprocess data.
-    shaps = shaps.sort_values(by=[_SHAP_VALUE], ascending=False)
-    feature_cols = [col for col in df.columns if _FEATURE_PREFIX in col]
-    df[_DISEASE_CONDITION] = df[_DISEASE_CONDITION].fillna(_NULL)
+    shaps = shaps.sort_values(by=[constants.SHAP_VALUE], ascending=False)
+    feature_cols = [col for col in df.columns if constants.FEATURE_PREFIX in col]
+    df[constants.DISEASE_CONDITION] = df[constants.DISEASE_CONDITION].fillna(constants.NULL)
 
     # Split data to train on the controls and test on the experiments with drugs
-    df_controls = df[df[_TREATMENT].isna()]
+    df_controls = df[df[constants.TREATMENT].isna()]
     X = df_controls[feature_cols]
-    y = df_controls[_DISEASE_CONDITION]
+    y = df_controls[constants.DISEASE_CONDITION]
 
     # Drop features based on Shapley score for predicting disease condition
-    shap_cutoffs = np.arange(0, shaps[_SHAP_VALUE].max(), cutoff_step).tolist()
+    shap_cutoffs = np.arange(0, shaps[constants.SHAP_VALUE].max(), cutoff_step).tolist()
     sensitivity_df = pd.DataFrame(columns = ['Macro Precision','Macro Recall','Macro F1'], index=shap_cutoffs)
 
-    n_features_at_cutoff = len(list(shaps[shaps[_SHAP_VALUE] > final_shap_cutoff].feature))
+    n_features_at_cutoff = len(list(shaps[shaps[constants.SHAP_VALUE] > final_shap_cutoff].feature))
     n_features_list = []
 
     for i in shap_cutoffs:
         if i > 0 :
-            features_to_drop = list(shaps[shaps[_SHAP_VALUE] < i].feature)
+            features_to_drop = list(shaps[shaps[constants.SHAP_VALUE] < i].feature)
             X_dot = X.copy(deep=True).drop(features_to_drop, axis=1)
         elif i == 0:
             X_dot = X

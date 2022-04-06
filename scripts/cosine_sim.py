@@ -2,22 +2,7 @@ import pandas as pd
 import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
 import argparse
-
-_FEATURE = 'feature_'
-_DISEASE_CONDITION = 'disease_condition'
-_TREATMENT_CONC = 'treatment_conc'
-_TREATMENT = 'treatment'
-_EXPERIMENT = 'experiment'
-_EXPERIMENT_TRT_CONC = 'expt_treatment_plus_conc'
-_EXPERIMENT_TRT_CONC_DC = 'expt_treatment_plus_conc_dc'
-_PLATE = 'plate'
-_SMILES = 'SMILES'
-_WELL = 'well'
-_WELL_ID = 'well_id'
-_SITE = 'site'
-_SITE_ID = 'site_id'
-_CELL_TYPE = 'cell_type'
-_SHAP_VALUE = 'shap_value'
+import constants
 
 
 def parse_args():
@@ -52,27 +37,27 @@ if __name__ == '__main__':
     # Load data and preprocess data.
     joined_df = pd.read_csv(args.input)
     # fill disease_condition=="" with 'null'
-    joined_df[_DISEASE_CONDITION] = joined_df[_DISEASE_CONDITION].fillna('null')
+    joined_df[constants.DISEASE_CONDITION] = joined_df[constants.DISEASE_CONDITION].fillna('null')
     # Combinde experiment, treatment and treatment concentration information
-    joined_df[_TREATMENT_CONC] = joined_df[_TREATMENT_CONC].astype(str)
+    joined_df[constants.TREATMENT_CONC] = joined_df[constants.TREATMENT_CONC].astype(str)
     joined_df.fillna('',inplace=True)
-    joined_df[_EXPERIMENT_TRT_CONC] = joined_df[_EXPERIMENT].astype(str) + '/' + joined_df[_TREATMENT] + '/' + joined_df[_TREATMENT_CONC].astype(str)
+    joined_df[constants.EXPERIMENT_TRT_CONC] = joined_df[constants.EXPERIMENT].astype(str) + '/' + joined_df[constants.TREATMENT] + '/' + joined_df[constants.TREATMENT_CONC].astype(str)
     
     # read in corresponding shap values
     shap = pd.read_csv(args.shap)
     # drop SHAP values less than a prescribed cutoff
-    features_to_drop = list(shap[shap[_SHAP_VALUE] < cutoff].feature)
+    features_to_drop = list(shap[shap[constants.SHAP_VALUE] < cutoff].feature)
     joined_df_dot = joined_df.copy(deep=True).drop(features_to_drop,axis=1)
     # Get relevant columns
-    joined_df_dot.drop([_PLATE, _SMILES, _TREATMENT, _SITE, _WELL, _EXPERIMENT, _CELL_TYPE, _WELL_ID, _SITE_ID, _TREATMENT_CONC], axis=1, inplace=True)
+    joined_df_dot.drop([constants.PLATE, constants.SMILES, constants.TREATMENT, constants.SITE, constants.WELL, constants.EXPERIMENT, constants.CELL_TYPE, constants.WELL_ID, constants.SITE_ID, constants.TREATMENT_CONC], axis=1, inplace=True)
     # Get active disease data
-    active_sars_cov_only = joined_df_dot[joined_df_dot[_DISEASE_CONDITION] == 'Active SARS-CoV-2']
-    active_sars_cov_only[_EXPERIMENT_TRT_CONC_DC] = active_sars_cov_only[_EXPERIMENT_TRT_CONC] + ' ' + active_sars_cov_only[_DISEASE_CONDITION]
-    active_sars_cov_only_groupby_mean = active_sars_cov_only.groupby(_EXPERIMENT_TRT_CONC_DC).mean()
+    active_sars_cov_only = joined_df_dot[joined_df_dot[constants.DISEASE_CONDITION] == 'Active SARS-CoV-2']
+    active_sars_cov_only[constants.EXPERIMENT_TRT_CONC_DC] = active_sars_cov_only[constants.EXPERIMENT_TRT_CONC] + ' ' + active_sars_cov_only[constants.DISEASE_CONDITION]
+    active_sars_cov_only_groupby_mean = active_sars_cov_only.groupby(constants.EXPERIMENT_TRT_CONC_DC).mean()
     # get control data
-    controls_only = joined_df_dot[joined_df_dot[_DISEASE_CONDITION] != 'Active SARS-CoV-2']
-    controls_only[_EXPERIMENT_TRT_CONC_DC] = controls_only[_EXPERIMENT_TRT_CONC] + ' ' + controls_only[_DISEASE_CONDITION]
-    controls_only_groupby_mean = controls_only.groupby(_EXPERIMENT_TRT_CONC_DC).mean()
+    controls_only = joined_df_dot[joined_df_dot[constants.DISEASE_CONDITION] != 'Active SARS-CoV-2']
+    controls_only[constants.EXPERIMENT_TRT_CONC_DC] = controls_only[constants.EXPERIMENT_TRT_CONC] + ' ' + controls_only[constants.DISEASE_CONDITION]
+    controls_only_groupby_mean = controls_only.groupby(constants.EXPERIMENT_TRT_CONC_DC).mean()
     # Get cosing similarity
     cosine_similarity_matrix = cosine_similarity(active_sars_cov_only_groupby_mean , controls_only_groupby_mean)
     cosine_sim_df = pd.DataFrame(data=cosine_similarity_matrix,index = active_sars_cov_only_groupby_mean.index.to_list(),columns = controls_only_groupby_mean.index.to_list())

@@ -8,23 +8,7 @@ import numpy as np
 import pickle
 import shap
 import argparse
-
-
-# Constants.
-_FEATURE_PREFIX = 'feature_'
-_FEATURE = 'feature'
-_SHAP_VALUE = 'shap_value'
-_SITE_ID = 'site_id'
-_PLATE = 'plate'
-_EXPERIMENT = 'experiment'
-_DISEASE_CONDITION = 'disease_condition'
-_NULL = 'null'
-_MOCK = "Mock"
-_TREATMENT = 'treatment'
-_RANDOM_STATE = 0
-_TEST_SIZE = 0.25
-_CV = 3
-
+import constants
 
 def parse_args():
     """
@@ -52,15 +36,15 @@ if __name__ == '__main__':
     # Load data and preprocess data.
     df = pd.read_csv(args.input)
 
-    feature_cols = [col for col in df.columns if _FEATURE_PREFIX in col]
+    feature_cols = [col for col in df.columns if constants.FEATURE_PREFIX in col]
     # subset to disease_condition=="" or "Mock"
-    df=df[(df[_DISEASE_CONDITION].isna()) | (df[_DISEASE_CONDITION]==_MOCK)]
+    df=df[(df[constants.DISEASE_CONDITION].isna()) | (df[constants.DISEASE_CONDITION]==constants.MOCK)]
     e = df.experiment.unique().tolist()[0]
     
     # Split data to train on the controls and test on the experiments with drugs
-    y = df[_PLATE].astype('category')
+    y = df[constants.PLATE].astype('category')
     X = df[feature_cols]
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=_TEST_SIZE, random_state=_RANDOM_STATE)
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=constants.TEST_SIZE, random_state=constants.RANDOM_STATE)
 
     del df
     
@@ -87,7 +71,7 @@ if __name__ == '__main__':
                  'bootstrap': bootstrap}
     # set up model
     clf = RandomForestClassifier()
-    clf_random = RandomizedSearchCV(estimator = clf, param_distributions = random_grid, n_iter = 100, cv = _CV, verbose=2, random_state=_RANDOM_STATE, n_jobs = -1)
+    clf_random = RandomizedSearchCV(estimator = clf, param_distributions = random_grid, n_iter = 100, cv = constants.CV, verbose=2, random_state=constants.RANDOM_STATE, n_jobs = -1)
     # Fit the random search model
     clf_random.fit(X_train, y_train)
     # get best results
@@ -107,7 +91,7 @@ if __name__ == '__main__':
                                  max_features = clf_random.best_params_['max_features'], 
                                  max_depth=clf_random.best_params_['max_depth'], 
                                  bootstrap = clf_random.best_params_['bootstrap'],
-                                 random_state=_RANDOM_STATE).fit(X_train, y_train)
+                                 random_state=constants.RANDOM_STATE).fit(X_train, y_train)
     y_preds = clf.predict(X_test)
     # get performance metrics from test set
     targets = [str(int) for int in list(set(y_test))]
@@ -120,8 +104,8 @@ if __name__ == '__main__':
     shap_values = explainer.shap_values(X_test)
     # Write all shap values.
     mean_feature_shap_values = np.abs(shap_values).mean(0).mean(0)
-    df_shap = pd.DataFrame(mean_feature_shap_values, columns=[_SHAP_VALUE])
-    df_shap[_FEATURE] = _FEATURE_PREFIX + df_shap.index.astype(str)
-    df_shap = df_shap[[_FEATURE, _SHAP_VALUE]]
-    df_shap = df_shap.sort_values(by=_SHAP_VALUE, ascending=False)
+    df_shap = pd.DataFrame(mean_feature_shap_values, columns=[constants.SHAP_VALUE])
+    df_shap[constants.FEATURE] = constants.FEATURE_PREFIX + df_shap.index.astype(str)
+    df_shap = df_shap[[constants.FEATURE, constants.SHAP_VALUE]]
+    df_shap = df_shap.sort_values(by=constants.SHAP_VALUE, ascending=False)
     df_shap.to_csv(f'{out_dir}/{out_file_name}', index=False)
