@@ -22,7 +22,10 @@ These scripts run using the SLURM Workload Manager. To perform these analyses wi
 
 ### Determine the Noise vs. Biological Signal in each Feature
 Run this command to split the data by experiment and calculate SHAP values for each feature when predicting plate (batch effect/noise) vs disease condition (biological signal):  
-`bash bash_scripts/split_n_get_shaps.sh data/embeddings.csv data/metadata.csv`
+`bash bash_scripts/split_n_get_shaps.sh data/embeddings.csv data/metadata.csv`  
+
+If you want to normalize the deep learning embeddings to remove batch effects (we strongly recommend this) then add a final argument when running, like so:  
+`bash bash_scripts/split_n_get_shaps.sh data/embeddings.csv data/metadata.csv normalize`  
 
 Run this command to view plots of the two SHAP values for each feature plotted against each other:  
 `bash bash_scripts/run_shap_plots.sh`
