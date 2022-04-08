@@ -39,7 +39,7 @@ if __name__ == '__main__':
 
     # Load data.
     df = pd.read_csv(args.input)
-    shaps =  pd.read_csv(args.diseaseConditionShaps)
+    shaps = pd.read_csv(args.diseaseConditionShaps)
 
     # Preprocess data.
     shaps = shaps.sort_values(by=[constants.SHAP_VALUE], ascending=False)
