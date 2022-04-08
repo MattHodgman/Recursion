@@ -38,7 +38,10 @@ Run this command to perform a sensitivity test on each experiment except replace
 
 ### Identify Potentially Effective Treatments
 Run this command to identify treatments that might be effective against SARS-CoV-2, using two different methods:  
-`bash bash_scripts/identify_effective_treatments.sh 0.0002 0.0022 0.002 0.00015`
+`bash bash_scripts/identify_effective_treatments.sh 0.0002 0.0022 0.002 0.00015`  
+
+If you want to identify effective compounds without feature dropping, run the above script with all cutoffs as 0 like so:  
+`bash bash_scripts/identify_effective_treatments.sh 0 0 0 0`  
 
 # Results
 
