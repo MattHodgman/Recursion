@@ -47,7 +47,6 @@ def power_transform(df, feature_cols):
     # combine transformed plate dfs into one
     plate_transformed_df = plate_transformed_dfs[0]
     for i in range(1, len(plate_transformed_dfs)):
-        print(plate_transformed_dfs[i])
         plate_transformed_df = plate_transformed_df.append(plate_transformed_dfs[i], ignore_index=True)
 
     return plate_transformed_df
