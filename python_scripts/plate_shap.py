@@ -22,7 +22,7 @@ def parse_args():
     parser = argparse.ArgumentParser(description='Use a random grid search a random forest model to classify plate and then calculate the SHAP value for each feature.')
     parser.add_argument('-i', '--input', help='CSV of DL embeddings and metadata for a specific experiment.', type=str, required=True)
     parser.add_argument('-o', '--output', help='Directory to write output to. Default is current directory.', type=str, default='.', required=False)
-    parser.add_argument('-n', '--outputFileName', help='Name of the ouput file.', type=str, default='shap_values_disease_condition.csv', required=False)
+    parser.add_argument('-n', '--outputFileName', help='Name of the ouput file.', type=str, default='shap_values_plate.csv', required=False)
     args = parser.parse_args()
     return args
 
