@@ -33,7 +33,7 @@ def power_transform(df, feature_cols):
     for plate in plates:
         values = df[df[constants.PLATE] == plate][feature_cols].values
         plate_values[plate] = values
-        plate_metadata[plate] = df.loc[:, ~df.columns.isin(feature_cols)]
+        plate_metadata[plate] = df[df[constants.PLATE] == plate].loc[:, ~df.columns.isin(feature_cols)]
 
     plate_transformed_dfs = []
 
