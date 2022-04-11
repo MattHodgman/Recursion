@@ -14,7 +14,7 @@ def parse_args():
     Returns:
         args: some sort of argparse object that the arguments can be extracted from.
     """
-    parser = argparse.ArgumentParser(description='Use a random grid search a random forest model to classify plate and then calculate the SHAP value for each feature.')
+    parser = argparse.ArgumentParser(description='Power normalize deep learning features and return normalized features.')
     parser.add_argument('-i', '--input', help='CSV of DL embeddings and metadata for a specific experiment.', type=str, required=True)
     parser.add_argument('-o', '--output', help='Directory to write output to. Default is current directory.', type=str, default='.', required=False)
     parser.add_argument('-n', '--outputFileName', help='Name of the ouput file.', type=str, default='normalized_embeddings_and_metadata.csv', required=False)
