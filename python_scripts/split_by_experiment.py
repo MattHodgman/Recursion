@@ -43,6 +43,6 @@ if __name__ == '__main__':
     experiments = list(df.experiment.unique())
 
     for exp in experiments:
-        print(f'subsetting {exp} and writing to file {out_dir}/{exp}/{out_file_name}')
+        print(f'subsetting {exp} and writing to file {out_dir}/{exp}_{out_file_name}')
         exp_df = df[df[constants.EXPERIMENT] == exp]
-        exp_df.to_csv(f'{out_dir}/{exp}/{out_file_name}', index=False)
+        exp_df.to_csv(f'{out_dir}/{exp}_{out_file_name}', index=False)
