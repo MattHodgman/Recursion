@@ -16,7 +16,7 @@ def parse_args():
     """
     parser = argparse.ArgumentParser(description='Use a random grid search a random forest model to classify plate and then calculate the SHAP value for each feature.')
     parser.add_argument('-i', '--input', help='CSV of DL embeddings and metadata for a specific experiment.', type=str, required=True)
-    parser.add_argument('-s', '--shap', help='CSV of SHAP values for a specific experiment.', type=str, required=True)
+    parser.add_argument('-s', '--shap', help='CSV of disease condition SHAP values for a specific experiment.', type=str, required=True)
     parser.add_argument('-c', '--cutoffSHAP', help='SHAP value cutoff', type=str, required=True)
     parser.add_argument('-o', '--output', help='Directory to write output to. Default is current directory.', type=str, default='.', required=False)
     parser.add_argument('-n', '--outputFileName', help='Name of the ouput file.', type=str, default='cosine_similarity.csv', required=False)
