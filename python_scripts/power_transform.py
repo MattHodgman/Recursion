@@ -64,7 +64,6 @@ if __name__ == '__main__':
     df = pd.read_csv(args.input)
     df[constants.DISEASE_CONDITION] = df[constants.DISEASE_CONDITION].fillna(constants.NULL)
     feature_cols = [col for col in df.columns if constants.FEATURE_PREFIX in col]
-    cols_to_keep = feature_cols + [constants.PLATE] + [constants.DISEASE_CONDITION]
 
     # Normalize
     plate_transformed_df = power_transform(df, feature_cols)
