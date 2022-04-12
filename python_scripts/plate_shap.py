@@ -1,7 +1,6 @@
 # This script calculates the SHAP value for each deep learning embedding feature for predicting plate.
 
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.model_selection import cross_validate
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import classification_report
 from sklearn.model_selection import RandomizedSearchCV
@@ -53,17 +52,23 @@ if __name__ == '__main__':
     # Random Grid Search
     # Number of trees in random forest
     n_estimators = [int(x) for x in np.linspace(start = 50, stop = 1100, num = 50)]
+    
     # Number of features to consider at every split
     max_features = ['auto', 'sqrt']
+    
     # Maximum number of levels in tree
     max_depth = [int(x) for x in np.linspace(10, 110, num = 11)]
     max_depth.append(None)
+    
     # Minimum number of samples required to split a node
     min_samples_split = [2, 5, 10]
+    
     # Minimum number of samples required at each leaf node
     min_samples_leaf = [1, 2, 4]
+    
     # Method of selecting samples for training each tree
     bootstrap = [True, False]
+    
     # Create the random grid
     random_grid = {'n_estimators': n_estimators,
                  'max_features': max_features,
@@ -74,10 +79,13 @@ if __name__ == '__main__':
     # set up model
     clf = RandomForestClassifier()
     clf_random = RandomizedSearchCV(estimator = clf, param_distributions = random_grid, n_iter = 100, cv = constants.CV, verbose=2, random_state=constants.RANDOM_STATE, n_jobs = -1)
+    
     # Fit the random search model
     clf_random.fit(X_train, y_train)
+
     # get best results
     print("Best hyperparameters: " + str(clf_random.best_params_))
+
     # save best parameters dictionary
     print(e + " writing pickle file (Pickle Rick!)")
     
@@ -95,15 +103,19 @@ if __name__ == '__main__':
                                  bootstrap = clf_random.best_params_['bootstrap'],
                                  random_state=constants.RANDOM_STATE).fit(X_train, y_train)
     y_preds = clf.predict(X_test)
+
     # get performance metrics from test set
     targets = [str(int) for int in list(set(y_test))]
     print(e)
     print(classification_report(y_test, y_preds, target_names=targets))
+
     # Get shap values and output .csv
     print("Computing SHAP values")
+
     # Calculate shap values.
     explainer = shap.TreeExplainer(clf)
     shap_values = explainer.shap_values(X_test)
+
     # Write all shap values.
     mean_feature_shap_values = np.abs(shap_values).mean(0).mean(0)
     df_shap = pd.DataFrame(mean_feature_shap_values, columns=[constants.SHAP_VALUE])

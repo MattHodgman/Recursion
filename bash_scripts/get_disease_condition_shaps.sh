@@ -11,5 +11,5 @@ data=$1 # the combined embeddings and metadata file for an experiment
 experiment=$2 # the name of the experiment
 
 # compute shap values for predicting disease condition.
-source ../env/bin/activate
-python3 ../python_scripts/disease_cond_shap.py -i "$data" -o ../data/"$experiment" -n shap_values_disease_condition.csv
+source env/bin/activate
+python3 python_scripts/disease_cond_shap.py -i "$data" -o data/"$experiment" -n shap_values_disease_condition.csv
