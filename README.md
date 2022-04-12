@@ -7,8 +7,7 @@
 [Link to workflow](https://lucid.app/lucidchart/9739d8d3-26d3-4959-b034-2f15c89a7847/edit?invitationId=inv_9ac14d2d-d648-4636-b2d6-6305685309c3)
 
 ### Download the RxRx19a Data
-Create a directory called 'data' in the home directory of the repo but running:  
-`mkdir data`  
+Create a directory called 'data' in the home directory of the repo but running: `mkdir data`  
 
 Go to [https://www.rxrx.ai/rxrx19a](https://www.rxrx.ai/rxrx19a), scroll to the bottom of the page, and download the "Metadata" and "Deep Learning Embeddings." Put these files (`metadata.csv` and `embeddings.csv`) into the `data` directory.
 
