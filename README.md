@@ -19,6 +19,16 @@ This can be done by running the following commands:
 `source env/bin/activate`  
 `python3 -m pip install -r requirements.txt`  
 
+If that does not work, just make sure these packages are installed:  
+```
+pandas
+numpy
+imbalanced-learn
+scikit-learn
+matplotlib
+shap
+```
+
 ### Running the Pipeline
 These scripts run using the SLURM Workload Manager. To perform these analyses without SLURM, you must replace `sbatch` with `bash` in all the bash scripts. When running with SLURM, you may need to adjust the bash scripts resource requests or other arguments. 
 
