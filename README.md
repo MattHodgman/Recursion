@@ -41,13 +41,13 @@ If you want to normalize the deep learning embeddings to remove batch effects (w
 
 If you want to run with just feature dropping, instead add the argument `f`. If you want to use both, add `b` instead.
 
-Run this command to view plots of the two SHAP values for each feature plotted against each other:  
+If feature dropping, run this command to view plots of the two SHAP values for each feature plotted against each other:  
 `bash bash_scripts/run_shap_plots.sh`
 
 Look at each experiments' plot to determine a cutoff for the disease condition shap that will remove the features that have small SHAP values for disease condition but have large shap values for plate. Record these four cut off values because we will use them in subsequent scripts.
 
 ### Ensure that Removing Noisy Features does not Remove Biological Signal
-Run this command to perform a sensitivity test on each experiment except replace the four numbers with your determined SHAP cut off values for the HRCE-1, HRCE-2, VERO-1, and VERO-2 experiments, respectively.  
+Run this command to perform a sensitivity test on each experiment except replace the four numbers with your determined SHAP cut off values for the HRCE-1, HRCE-2, VERO-1, and VERO-2 experiments, respectively. You can skip this step if you are only normalizing and not feature dropping.  
 `bash bash_scripts/run_all_sensitivity_tests.sh 0.0002 0.0022 0.002 0.00015`
 
 ### Identify Potentially Effective Treatments
@@ -55,7 +55,7 @@ Run this command to identify treatments that might be effective against SARS-CoV
 `bash bash_scripts/identify_effective_treatments.sh 0.0002 0.0022 0.002 0.00015`  
 
 If you want to identify effective compounds without feature dropping, run the above script with all cutoffs as 0 like so:  
-`bash bash_scripts/identify_effective_treatments.sh 0 0 0 0`  
+`bash bash_scripts/identify_effective_treatments.sh n`  
 
 # Results
 

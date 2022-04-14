@@ -16,10 +16,10 @@ def parse_args():
     """
     parser = argparse.ArgumentParser(description='For a given experiment, obtain the treatment and concentration with the highest probability of being predicted as MOCK')
     parser.add_argument('-i', '--input', help='CSV of DL embeddings and metadata for a specific experiment.', type=str, required=True)
-    parser.add_argument('-s', '--diseaseConditionShaps', help='A CSV with a column \'feature\' that contains feature IDs and a column \'shap_value\' that contains the Shapley value of that feature when predicting disease condition. ', type=str, required=True)
-    parser.add_argument('-f', '--finalShapCutoff', help='The final Shapley value cutoff.', type=float, default=0.0023, required=False)
+    parser.add_argument('-s', '--diseaseConditionShaps', help='A CSV with a column \'feature\' that contains feature IDs and a column \'shap_value\' that contains the Shapley value of that feature when predicting disease condition. ', type=str, required=False)
+    parser.add_argument('-f', '--finalShapCutoff', help='The final Shapley value cutoff.', type=float, default=0, required=False)
     parser.add_argument('-o', '--output', help='Directory to write output to. Default is current directory.', type=str, default='.', required=False)
-
+    parser.add_argument('-n', '--normalized', help='Flag to indicate input is normalized, shap files do not exist, and no feature dropping is necessary.', action='store_true', required=False)
     args = parser.parse_args()
     return args
 
@@ -34,12 +34,18 @@ if __name__ == '__main__':
 
     # Load data.
     df = pd.read_csv(args.input)
-    shap = pd.read_csv(args.diseaseConditionShaps)
+
+    if not args.normalized:
+        # Drop features.
+        shap = pd.read_csv(args.diseaseConditionShaps)
+        shap = shap.sort_values(by=[constants.SHAP_VALUE], ascending=False)
+        features_to_drop = list(shap[shap[constants.SHAP_VALUE]<final_shap_cutoff].feature)
+        joined_df_dot = df.copy(deep=True).drop(features_to_drop,axis=1)
+    else:
+        joined_df_dot = df
+        final_shap_cutoff = 'no'
 
     # Preprocess data.
-    shap = shap.sort_values(by=[constants.SHAP_VALUE], ascending=False)
-    features_to_drop = list(shap[shap[constants.SHAP_VALUE]<final_shap_cutoff].feature)
-    joined_df_dot = df.copy(deep=True).drop(features_to_drop,axis=1)
     df['disease_condition'] = df['disease_condition'].fillna('null')
     joined_df_dot['disease_condition'] = joined_df_dot['disease_condition'].fillna('null')
     df['treatment_conc'] = df['treatment_conc'].astype(str)

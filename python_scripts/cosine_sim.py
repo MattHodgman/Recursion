@@ -15,11 +15,12 @@ def parse_args():
     """
     parser = argparse.ArgumentParser(description='Use a random grid search a random forest model to classify plate and then calculate the SHAP value for each feature.')
     parser.add_argument('-i', '--input', help='CSV of DL embeddings and metadata for a specific experiment.', type=str, required=True)
-    parser.add_argument('-s', '--shap', help='CSV of disease condition SHAP values for a specific experiment.', type=str, required=True)
-    parser.add_argument('-c', '--cutoffSHAP', help='SHAP value cutoff', type=str, required=True)
+    parser.add_argument('-s', '--shap', help='CSV of disease condition SHAP values for a specific experiment.', type=str, required=False)
+    parser.add_argument('-c', '--cutoffSHAP', help='SHAP value cutoff', type=float, default=0, required=False)
     parser.add_argument('-o', '--output', help='Directory to write output to. Default is current directory.', type=str, default='.', required=False)
-    parser.add_argument('-n', '--outputFileName', help='Name of the ouput file.', type=str, default='cosine_similarity.csv', required=False)
+    parser.add_argument('-f', '--outputFileName', help='Name of the ouput file.', type=str, default='cosine_similarity.csv', required=False)
     parser.add_argument('-e', '--expName', help='Experiment name.', type=str, default='EXPER_', required=False)
+    parser.add_argument('-n', '--normalized', help='Flag to indicate input is normalized, shap files do not exist, and no feature dropping is necessary.', action='store_true', required=False)
     args = parser.parse_args()
     return args
 
@@ -31,7 +32,7 @@ if __name__ == '__main__':
     args = parse_args()
     out_dir = args.output.rstrip('/')
     file_name = args.outputFileName
-    cutoff = float(args.cutoffSHAP)
+    cutoff = args.cutoffSHAP
     e = args.expName
     out_file_name = e + '_' + file_name
     
@@ -46,12 +47,15 @@ if __name__ == '__main__':
     joined_df.fillna('',inplace=True)
     joined_df[constants.EXPERIMENT_TRT_CONC] = joined_df[constants.EXPERIMENT].astype(str) + '/' + joined_df[constants.TREATMENT] + '/' + joined_df[constants.TREATMENT_CONC].astype(str)
     
-    # read in corresponding shap values
-    shap = pd.read_csv(args.shap)
+    if not args.normalized:
+        shap = pd.read_csv(args.shap)  # read in corresponding shap values
 
-    # drop SHAP values less than a prescribed cutoff
-    features_to_drop = list(shap[shap[constants.SHAP_VALUE] < cutoff].feature)
-    joined_df_dot = joined_df.copy(deep=True).drop(features_to_drop,axis=1)
+        # drop SHAP values less than a prescribed cutoff
+        features_to_drop = list(shap[shap[constants.SHAP_VALUE] < cutoff].feature)
+        joined_df_dot = joined_df.copy(deep=True).drop(features_to_drop,axis=1)
+    
+    else:
+        joined_df_dot = joined_df
 
     # Get relevant columns
     joined_df_dot.drop([constants.PLATE, constants.SMILES, constants.TREATMENT, constants.SITE, constants.WELL, constants.EXPERIMENT, constants.CELL_TYPE, constants.WELL_ID, constants.SITE_ID, constants.TREATMENT_CONC], axis=1, inplace=True)
