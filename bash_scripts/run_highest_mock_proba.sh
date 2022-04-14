@@ -10,7 +10,7 @@
 # $1=experiment_data $2=experiment $3=final_shap_cutoff
 source env/bin/activate
 
-if [ "$2" == "n" ]
+if [ "$3" == "n" ]
     then
         python3 python_scripts/highest_mock_proba.py -i $1 -n -o data/$2
     else
