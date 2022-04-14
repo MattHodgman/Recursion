@@ -65,4 +65,4 @@ if __name__ == '__main__':
     
     # Of the individuals experiments that are assigned as Active SARS-CoV-2, which ones has the highest average probability to be predicted as mock
     mock_prob_given_active = df[df['disease_condition']=='Active SARS-CoV-2'].groupby('treatment_plus_conc')['Predicted Mock'].mean()
-    mock_prob_given_active.sort_values(ascending=False).head(20).to_csv('{}/mock_proba_{}_{}_cutoff_brf.csv'.format(out_dir,final_shap_cutoff,out_dir))
+    mock_prob_given_active.sort_values(ascending=False).head(20).to_csv('{}/mock_proba_{}_cutoff_brf.csv'.format(out_dir,final_shap_cutoff))
