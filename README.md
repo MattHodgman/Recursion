@@ -48,7 +48,7 @@ Look at each experiments' plot to determine a cutoff for the disease condition s
 
 ### Ensure that Removing Noisy Features does not Remove Biological Signal
 Run this command to perform a sensitivity test on each experiment except replace the four numbers with your determined SHAP cut off values for the HRCE-1, HRCE-2, VERO-1, and VERO-2 experiments, respectively.  
-`bash bash_scripts/run_all_sensitvity_tests.sh 0.0002 0.0022 0.002 0.00015`
+`bash bash_scripts/run_all_sensitivity_tests.sh 0.0002 0.0022 0.002 0.00015`
 
 ### Identify Potentially Effective Treatments
 Run this command to identify treatments that might be effective against SARS-CoV-2, using two different methods:  
