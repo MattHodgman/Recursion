@@ -1,10 +1,12 @@
 
 
-# Pipeline
+# Workflow
 
-![pipeline](pipeline.png)
+![workflow](Workflow.png)
 
-[Link to workflow](https://lucid.app/lucidchart/9739d8d3-26d3-4959-b034-2f15c89a7847/edit?invitationId=inv_9ac14d2d-d648-4636-b2d6-6305685309c3)
+# Feature Selection
+![feature_selection](feature_selection.png)
+
 
 ### Download the RxRx19a Data
 Create a directory called 'data' in the home directory of the repo but running: `mkdir data`  
