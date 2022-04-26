@@ -1,10 +1,9 @@
 
 
-# Workflow
+
 
 ![workflow](Workflow.png)
 
-# Feature Selection
 ![feature_selection](feature_selection.png)
 
 
